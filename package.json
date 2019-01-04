@@ -2,5 +2,11 @@
   "name": "linux",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.19.0",
+    "marked": "^0.6.0",
+    "marked-terminal": "^3.1.1"
+  }
 }
