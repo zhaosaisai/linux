@@ -49,7 +49,7 @@ module.exports = async function(cmd) {
     const md = await readFile(_.resolve(cmd, 'utf8'))
     _.markedConsole(md.toString())
   } catch(e) {
-    // default input
+    // default output
     _.info(cmd)
   }
 }
