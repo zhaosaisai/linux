@@ -1,5 +1,5 @@
 {
-  "name": "linux",
+  "name": "@zsee/linux",
   "version": "1.0.0",
   "main": "index.js",
   "description": "A cli to show detail of the linux command",
