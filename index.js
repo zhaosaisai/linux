@@ -5,9 +5,11 @@ const { exec } = require('child_process')
 const marked = require('marked')
 const TerminalRenderer = require('marked-terminal')
 const util = require('util')
+const stringSimilarity = require('string-similarity')
 
 const cmds = require('./cmds')
 const readFile = util.promisify(fs.readFile)
+const log = info => process.stdout.write(`${info}\n`)
 
 marked.setOptions({
   renderer: new TerminalRenderer()
@@ -28,7 +30,7 @@ exports.info = cmd => new Promise((resolve, reject) => {
     if (err) {
       return reject(err)
     }
-    return process.stdout.write(stdout.toString())
+    return log(stdout.toString())
   })
 })
 
@@ -36,13 +38,28 @@ exports.include = cmd => cmds.includes(cmd)
 
 exports.resolve = cmd => path.resolve(__dirname, './.commands', `${cmd}.md`)
 
+exports.matches = cmd => {
+  const { bestMatch } = stringSimilarity.findBestMatch(cmd, cmds)
+  if (bestMatch) {
+    return bestMatch.target
+  }
+  return ''
+}
+
 exports.markedConsole = content => console.log('\n', marked(content), '\n')
+
 
 module.exports = async function(cmd) {
   const _ = exports
   
   if (!_.include(cmd) || !(await _.which(cmd))) {
-    return process.stdout.write(chalk.red(`Unsupported command ${cmd}\n`))
+    log(chalk.red(`Unsupported command ${cmd}\n`))
+
+    const matchdCmd = _.matches(cmd)
+    if (matchdCmd) {
+      log(`${chalk.yellow('The most similar command is')}\n\t${chalk.green(matchdCmd)}`)
+    }
+    return
   }
 
   try {
