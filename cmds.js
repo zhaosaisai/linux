@@ -3,6 +3,7 @@ module.exports = [
   "alias",
   "apachectl",
   "apmd",
+  "ab",
   "ar",
   "arpwatch",
   "aumix",
